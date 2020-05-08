@@ -1,0 +1,73 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
+import os, sys
+import pstr
+import click
+
+pss = pstr.pcolor().Pss
+cmd = os.system
+app = sys.argv
+
+def File(path, comm, app):
+    FILE = open(f"{path}", "r")
+    for i in FILE.readlines():
+        if comm in ('i', 'r', 'd', 'u'):
+            print(pss(f"<!r>[*] <!y>Package name: <!c>{i.strip()}<!e>\n"))
+            cmd(f"sudo pip3 {app} --user {i.strip()}")
+            print(pss("<!bu>-<!e>"*50))
+    FILE.close()
+    
+@click.command()
+@click.argument("command")
+@click.argument("appli", default="all")
+@click.version_option('2.0.0')
+@click.help_option('-h', '--help')
+@click.option('-f', '--file')
+
+def InstallPip3(command, appli, file):
+    y, x = click.get_terminal_size()
+    if y < 80 and x < 10:
+        print('Please Beg the terminal size for cuntune')
+        sys.exit(1)
+
+    Dic = {
+        "i" : "install",
+        "r" : "uninstall",
+        "f" : "freeze",
+        "s" : "search",
+        "d" : "download",
+        "l" : "list",
+        "sh" :"show",
+        "h"  : "help",
+        "u"  : "install --upgrade",
+       }
+
+    if app[1] in ('h', '-h', '--help'):
+        print(pstr.info('Commands: ', massing='', color='g'))
+        for i, s in Dic.items():print(pss(f"\t<!c>{i},  <!y>{s}<!e>"))
+        sys.exit(0)
+    PIP = Dic[command]
+    
+    TEXT = pss(f"""
+    <!r>[*] <!y>app name     : <!c>pip3<!e>
+    <!r>[*] <!y>Script name  : <!c>{app[0]}<!e>
+    <!r>[*] <!y>Package Name : <!c>{appli}<!e>
+    <!r>[*] <!y>Command Name : <!c>{PIP}<!e>
+    <!r>[*] <!y>Write the Passowrd\n<!g>""")
+
+    print(TEXT)
+
+    if file:
+    	File(file, command, PIP)
+    	sys.exit(0)
+
+    if command in ('i', 'r', 'd', 'u'):
+        cmd(f"sudo pip3 {PIP} --user {appli}")
+        print(pss("<!bu>-<!e>"*50))
+    else:
+        cmd(f"sudo pip3 {PIP} {appli}")
+        print(pss("<!bu>-<!e>"*50))
+
+if __name__ == "__main__":
+    InstallPip3()

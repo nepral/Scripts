@@ -1,0 +1,58 @@
+#!/usr/bin/python3
+
+import os, sys, traceback
+import time
+import pstr
+
+pss = pstr.pcolor().Pss
+
+vairos = pss('''<!r>
+      &---------------------------------&
+       Oh No this is hash virose
+      &---------------------------------&<!e>
+''')
+good = pss('''<!g>
+      &-------------------------------&
+       Oh Yes this is hash Good
+      &-------------------------------&<!e>
+''')
+
+def main():
+    try:
+      while True:
+# ================================================================
+        print(pss("\n <!r>? <!w>Press <!c>'Ctrl + C'<!w> or <!c>'q' <!w>for Exit ...<!e>\n"))
+        hash1 = input(pss(" <!r>❯ <!bu>Enter Your String ♥  <!e>"))
+        # while hash1 == '':
+            #hash1 = input(colors2 + "  ## Enter Your Hash1 # :--> " + E)
+        if hash1 in ("q", "Q", "quit"):
+                  break
+# #################################################################
+        print("")
+        hash2 = input(pss(" <!r>❯ <!y>Enter Your String ♥  <!e>"))
+        # while hash2 == '':
+            #hash2 = input(colors22 + "  ## Enter your hash2 # :--> " + E)
+        if hash2 in ("q", "Q", "quit"):
+                  break
+# ================================================================
+
+# ######################### Yes
+        if hash1 == hash2:
+             os.system("clear")
+             print(good)
+# ######################### No
+        elif hash1 != hash2:
+            os.system("clear")
+            print(vairos)
+# ================================================================
+    except KeyboardInterrupt:
+        print("")
+        print(pss(" \n    <!c>Closing, bye! ...<!e>"))
+    except Exception:
+        traceback.print_exc(file=sys.stdout)
+        sys.exit()
+# ================================================================
+if __name__ == '__main__':
+    main()
+
+

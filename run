@@ -1,0 +1,110 @@
+#!/usr/bin/python3
+
+from sys import argv, exit
+from subprocess import call
+import pstr
+import re
+
+pss = pstr.pcolor().Pss
+conf = pstr.config('run.cfg', '/home/osama/Desktop/')
+
+
+Help = """\
+<!bu>?<!e> Usage: <!y>run [<!r>option<!y>] FILE
+    <!c>this script for run any file language<!e>
+
+<!bu>?<!e> Options:<!y>
+    -c      run c/c++ script 
+    -p      run python script
+    -b      run bash shell script
+    -js     run javascript file with node
+    -j      run java script
+    -je     run electron script
+<!e>
+
+<!bu>?<!e> Example:
+    $<!y> run -c test.c<!e>
+
+    or you can run file without any option
+    $<!y> run test.c<!e>
+"""
+
+# this code for run any script 
+# C_L = ("-c", "c", "gcc", "-cc", "-gcc")
+# P_L = ("-p", "p")
+# B_L = ("-b", "b")
+
+C_L = (".c", ".gcc")
+P_L = (".py")
+B_L = (".sh")
+Js_L = (".js")
+EJ_L = (".")
+H_L = (".html", ".xml")
+
+try:
+    C_cmd = conf.get("C_cmd")
+    P_cmd = conf.get("P_cmd")
+    B_cmd = conf.get("B_cmd")
+    G_cmd = conf.get("G_cmd")
+    A_cmd = conf.get("A_cmd")
+    PH_cmd = conf.get("PH_cmd")
+    H_cmd = conf.get("H_cmd")
+    Cs_cmd = conf.get("Cs_cmd")
+    Js_cmd = conf.get("Js_cmd")
+    EJ_cmd = conf.get("EJ_cmd")
+    Ja_cmd = conf.get("Ja_cmd")
+
+
+    # C_cmd = f"gcc {argv[1]} -o {argv[1][0:-2]} && ./{argv[1][0:-2]}"
+    # P_cmd = f"python3 {argv[1]} {argv[2:]}"
+    # B_cmd = f"sh {argv[1]} {argv[2:]}"
+    # G_cmd = ""
+    # A_cmd = ""
+    # PH_cmd = ""
+    # H_cmd = ""
+    # Cs_cmd = ""
+    # Js_cmd = f"node {argv[1]} {argv[2:]}"
+    # EJ_cmd = f"electron . {argv[2:]}"
+    # Ja_cmd = f"javac {argv[1]} {argv[2:]}"
+    # H_cmd = f"firefox {argv[1]} {argv[2:]}"
+
+    all_cmd = {
+        'C_cmd' : f"{C_cmd} {argv[1]} -o {argv[1][0:-2]} && ./{argv[1][0:-2]}",
+        'P_cmd' : f"{P_cmd} {argv[1]} {argv[2:]}",
+        'B_cmd' : f"{B_cmd} {argv[1]} {argv[2:]}",
+        'G_cmd' : "",
+        'A_cmd' : "",
+        'PH_cmd' : "",
+        'Cs_cmd' : "",
+        'Js_cmd' : f"{Js_cmd} {argv[1]} {argv[2:]}",
+        'EJ_cmd' : f"{EJ_cmd} . {argv[2:]}",
+        'Ja_cmd' : f"{Ja_cmd} {argv[1]} {argv[2:]}",
+        'H_cmd' : f"{H_cmd} {argv[1]} {argv[2:]}"
+    }
+
+
+except IndexError:
+    pss(Help, pr=True)
+    exit(1)
+
+def cli(commands, shell_cmd):
+    if argv[1].endswith(commands):
+        status = call(all_cmd[shell_cmd], shell=True)
+
+        if status != 0:
+            status_str = 'False'
+        else:
+            status_str = 'True'
+
+        pss(f"\n\n <!bu>? <!y>status code: <!c>{status} <!w>{status_str}<!e>", pr=True)
+
+    elif argv[1] in ("h", "-h", "help", "--help"):
+        pss(Help, pr=True)
+        exit(0)
+
+cli(C_L, 'C_cmd')
+cli(P_L, 'P_cmd')
+cli(B_L, 'B_cmd')
+cli(Js_L, 'Js_cmd')
+cli(EJ_L, 'EJ_cmd')
+cli(H_L, 'H_cmd')

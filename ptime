@@ -1,0 +1,192 @@
+#!/usr/bin/python3
+
+from uptime import uptime
+import os, sys
+import time
+import pstr
+from click import get_terminal_size as gts
+
+ts = time.sleep
+cl = pstr.pcolor().Pss
+tm = time.strftime
+arg = sys.argv
+
+# day = tm("%A")
+# year = tm("%Y")
+# scan = tm("%S")
+# mint = tm("%M")
+# month = tm("%B : %m")
+# hour = tm("%l")
+
+def main():
+    Help = """ 
+  app name: ptime 
+  version:  2.0.1
+  author:   Osama
+  email_author: osamanepral@gmail.com
+
+  this is application for show all time and uptime for your computer and run time
+
+    Usage:
+        ptime [option]
+
+    Commands:
+        run     run a time counte [hour, minit, socend]
+        up      show uptime for my computer
+        all     show all date time
+        """
+    try:
+        if arg[1] == None:
+            print('Oh not argumant for cuntue ...! ')
+
+        elif arg[1] in ('h', 'help', '--help', 'H', '-help', 'version'):
+            print(Help)
+            sys.exit(0)
+
+        elif arg[1] in ('all', '-a', 'a'):
+            all_time()
+
+        elif arg[1] in ('up', 'u', '-u'):
+            UpTIME()
+        
+        elif arg[1] in ('time', 'star', 'run'):
+            RunTime()
+        else:
+                print(pstr.bad('this argumant not found ...', massing=''))
+                cla = input(pstr.que('Do you want show all time ?: ', massing=''))
+                if cla in ('y', 'Y'):
+                    all_time()
+                else:
+                    sys.exit(0)
+    except IndexError:
+        print(Help)
+        sys.exit(1)
+
+    except KeyboardInterrupt:
+            print(pstr.run(" Closing...", massing=''))
+
+def RunTime(Hur=0, Min=0, Sca=0):
+
+    try:
+        Hur, Min, Sca = arg[2:]
+    except ValueError:
+        print("""\
+Usage:
+   ptime run [hour: int, minut: int, second: int] 
+use: 
+   ptime run 0 0 0 
+
+example:
+   ptime run 2 0 0
+   this example will start from 2 hour 
+""")
+        sys.exit(0)
+    
+    timer = pstr.config('ptime.cfg', '/home/osama/Desktop/')
+    timr_h = timer.get('TIMER_HUR', INT=True, cc=False)
+    timr_m = timer.get('TIMER_MIN', INT=True, cc=False)
+    timr_s = timer.get('TIMER_SCA', INT=True, cc=False)
+
+    music = timer.get("MUSIC")
+
+    while True:
+        print(pstr.info('press Ctrl+c for cansle.', message='', color='w'))
+        try:
+            Hur = int(Hur)
+            Min = int(Min)
+            Sca = int(Sca)
+            while True:
+                TSa = cl(f"<!r>[*] <!y>Time_Run: <!c>{Hur} <!bu>: <!c>{Min} <!bu>: <!c>{Sca} <!e>")
+                print(TSa, end='')
+                ts(1)
+                if Sca == 59:
+                    Min += 1
+                    Sca = 0
+                elif Min == 59:
+                    Hur += 1
+                    Min = 0
+                Sca += 1
+                if Hur == timr_h and Min == timr_m and Sca == timr_s:
+                    # here excute function for gui
+                    import playsound as ps
+                    counter = 0
+                    while counter < 10:
+                        ps.playsound(music)
+                        counter += 1
+                    sys.exit(0)
+                print('\b'*len(TSa), end='', flush=True)
+
+        except KeyboardInterrupt:
+            print('\n Closing ...!')
+            break
+            sys.exit(1)
+
+def all_time():
+    Month="Feb"
+    Day="8"
+    Ti1 = time.ctime()
+    Ti2 = list(Ti1.split(" "))
+    if Ti2[1] == Month and Ti2[2] == Day:
+        # import My_brithday as BR
+        # BR.myTime(Month, Day)
+        pass
+
+    Times = time.strftime(cl("""
+    <!y>year  :--> %Y <!e>
+    _____________________________
+    <!g>month :--> %B  : (%m) <!e>
+    _____________________________
+    <!bu>Today :--> %A : (%d) <!e>
+    _____________________________
+    <!183>Time  :--> %l:%M:%S (%p) <!e>
+    _____________________________
+        <!y>hour  :--> <!g>%l
+        ___________
+        <!y>main  :--> <!g>%M
+        ___________
+        <!y>scand :--> <!g>%S
+            
+    <!bu>Date  :--> <!y>%F -> <!g>%b -> <!bu>%a -><!183> %l:%M:%S (%p)<!e>
+           ____________________________________
+            """))
+    print(Times)
+
+def UpTIME():
+    y, x = gts()
+    if y < 95:
+        print('Please Beg the terminal size for cuntune')
+        sys.exit(1)
+
+    while True:
+        print(cl(f"\n <!r>[@] <!w>Press Ctrl+C for Exit .<!e>\n"))
+        try:
+            while True:
+                s = uptime()
+                m, s = divmod(s, 60)
+                h, m = divmod(m, 60)
+                d, h = divmod(h, 24)
+
+                h = int(h)
+                d = int(d)
+                s = int(s)
+                m = int(m)
+                a = "-"*20
+
+                day = tm("%A")
+                year = tm("%Y")
+                scan = tm("%S")
+                mint = tm("%M")
+                month = tm("%B : %m")
+                hour = tm("%l")
+
+                FF1 = cl(f"<!r>Up <!c>({s}) <!y>Scand , <!c>({m}) <!y>mnit , <!c>({h}) <!y>hour , <!c>({d}) <!y>Day <!g>| <!r>@date  <!y>hour : <!c>[{hour}] <!y>main : <!c>[{mint}] <!y>scand : <!c>[{scan}]<!e> ")
+                FF2 =   f"@date  hour : {hour}"
+                FF3 =   f" main : {mint}"
+                FF4 =   f" scand :{scan}"
+                print(FF1, end='')
+                print('\b'*len(FF1), end='', flush=True)
+        except KeyboardInterrupt:
+                print("\n\nBay ..!")
+                break
+if __name__ == "__main__":
+    main()

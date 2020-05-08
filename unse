@@ -1,0 +1,101 @@
+#!/usr/bin/python3
+
+import os, sys
+from pathlib import Path
+import subprocess as sup 
+import pstr
+
+# data1 = sup.Popen(["pwd"], stdout=sup.PIPE)
+# output1 = str(data1.communicate()[0]).replace("'", '') 
+
+# all_path = output1.strip("\\n b")
+all_path = os.getcwd()
+# zip_path =  sup.call('pwd', shell=True, sup) #os.getcwd() 
+# print(zip_path)
+def Unzip(path=all_path, zip_type=('zip')):
+	for i, z in zip(os.listdir(all_path), zip_type):
+		if i.endswith(zip_type):
+			if z  == ".zip":
+				os.system(f"unzip {i}")
+			elif z == ".tar.gz":
+				os.system(f"tar zxvf {i}")
+			else:
+				continue
+				# zcvf للضفط
+				# zxvf للفك
+			# remove = pstr.inpss(f" <!196>? <!y>Do You Want Remove This <!c>\"{i}\" <!y>archive [Y/n]:-><!e> ", suffix='')
+			# if remove in ('Y', 'y', 'yes'):
+				# if i.endswith(".{zip_type}"):
+					# os.remove(i)
+					# pstr.pss("\n<!196> * <!g>Removing Done ...!<!e>\n")
+		else:
+			pstr.pss("<!196> ! <!y>Ops these Folder or Files not archives .<!e> ")
+	pstr.pss("\n<!196> * <!g>Done... !<!e>\n")
+	sys.exit(0)
+	
+### this function for make all setup in path directory .
+def Setup(path=all_path, py_v='3', py_cmd='install'):
+	pack = pstr.inpss(' <!196>? <!y>Do You Want Install also from requirements.txt [Y/n]:-> <!e>')
+	for i in os.listdir(path):
+		if os.path.isfile(i):
+			continue
+		os.chdir(i)
+		if pack in ("y", "Y", 'yes'):
+			with open('requirements.txt', 'r') as rf:
+				for i in rf.readlines():
+					if os.path.exists('requirements.txt') and pack in ('y', 'Y', 'yes'):
+						# print(i)
+						os.system(f"spip {py_cmd} {i}")
+						pstr.pss("\n <!196>* <!e><!y>Installed all packages from requirements.txt <!g>Done... ! <!e>\n")
+		
+		os.system(f"sudo python{py_v} setup.py {py_cmd}")
+		os.chdir('..')
+	pstr.pss("\n<!g> * Done... !<!e>")
+
+def main():
+	arg = sys.argv
+	Help = """
+  app name: unse 
+  version:  2.0.1
+  author:   Osama
+  email_author: osamanepral@gmail.com
+
+  this is application for auto unzip file and setup.py install
+
+    Usage:
+        unse [option]
+
+    Commands:
+        un      unzip file
+        se      setup install file
+        all     run all functions
+        """
+
+	if arg[1] == None:
+		print('Oh not argumant for cuntue ...! ')
+
+	elif arg[1] in ('version', '-v', '--version'):
+		print(Help[14:37])
+
+	elif arg[1] in ('h', 'help', '--help', 'H', '-help', '-h'):
+		print(Help)
+	elif arg[1] in ('all', '-a', 'a'):
+		Unzip()
+		Setup()
+
+	elif arg[1] in ('un', 'u', '-u'):
+		Unzip(zip_type=(".zip", ".tar.gz", ".tar.xz"))
+
+	elif arg[1] in ('se', 'st', '-s'):
+		Setup()
+	else:
+		try:
+			print(pstr.bad('this argumant not found ...', massing=''))
+			sys.exit(1)
+		except KeyboardInterrupt:
+			print(pstr.run(" Closing...", massing=''))
+
+if __name__ == "__main__":
+	main()
+
+

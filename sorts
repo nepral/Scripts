@@ -1,0 +1,56 @@
+#!/usr/bin/python3
+
+import os, shutil
+
+## this for directory
+DIR = os.getcwd()
+myDir = os.path.dirname(DIR)
+
+## this function
+def End(List, Dir):
+    for filename in os.listdir(myDir):
+        if filename.endswith(List):
+            if not os.path.exists(Dir):
+                os.mkdir(Dir)
+            try:
+                shutil.move(filename, Dir)
+            except:
+                print(f"these files already exists: {filename}")
+
+## this is my list
+book    =   (".pdf")
+file    =   (".txt", ".text")
+office  =   (".doc", ".csv", ".word", ".xlsx")
+python  =   (".py", ".pyc", "pyo")
+java    =   (".java")
+image   =   (".png", ".jpg", ".jpeg", ".gif", ".ico", ".svg", ".bmp", ".bw", ".cur", ".eps", ".epsf", ".epsi", ".icns", ".pbm", ".pcx", ".pgm", ".pic", ".ppm", ".rgb", ".rgba", ".sgi", ".tga", ".tif", ".tiff", ".wbmp", ".webp", ".xpm", ".xbm")
+video   =   (".mp4", ".srt")
+music   =   (".mp3", ".m4a")
+bash    =   (".sh", ".zsh", ".bash")
+c_cpp   =   (".c", ".cpp")
+web     =   (".js", ".html", ".xml", ".css", ".json")
+win     =   (".exe", ".dmg")
+linux   =   (".deb", ".rpm")
+archive =   (".rar", ".zip", ".gz", ".tar", ".tar.gz", ".whl")
+VS      =   (".vsix")
+font    =   (".ttf")
+gui 	= 	(".ui", ".glade")
+
+# this is my function
+End(book, "Books")
+End(file, "Files")
+End(image, "Images")
+End(video, "Videos")
+End(music, "Music")
+End(python, "Python_Files")
+End(java, "Java_Files")
+End(bash, "Bash_Files")
+End(c_cpp, "c_cpp_Files")
+End(office, "Office_Filse")
+End(web, "Web_Files")
+End(linux, "Package_Linux")
+End(win, "Windows_app")
+End(archive, "Archive_Folder")
+End(VS, "VS_Code")
+End(font, "Font")
+End(gui, "GUI_Files")
