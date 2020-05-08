@@ -1,1 +1,4 @@
 # Scripts
+
+# usage:
+  script --help
